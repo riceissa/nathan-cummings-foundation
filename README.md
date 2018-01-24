@@ -13,3 +13,17 @@ so sometimes the OCR thinks the grantee column is in a column text (like in a tw
 whereas I want each line to be grantee, then amount
 
 but if i fix each group on its own and make sure they have the same number of lines, I can actually merge them automatically using visual blocks and virtualedit in vim
+
+# Summary
+
+- 1991–1994: Table format, where each program has a separate page, and each
+  page has several tables (for sub-areas of the program). To process, use
+  `proc_table.py` or the tab-separated text files. (I haven't decided which is
+  better yet.)
+- 1995–1996: Paragraph format, where each program has a separate page, and each page
+  has `<br>`-separated lines containing grant information. The grantee is in
+  bold, the amounts usually show up at the end of the line, etc., so there is
+  some regularity. To process, use `proc_list.py`.
+- 1997: There is an annual report but no grants list.
+- 2001: https://web.archive.org/web/20050508123155/http://www.nathancummings.net:80/annual/ncf_2001_grantlist.pdf
+- 2002–2013: PDF format. Use OCR'd output.
