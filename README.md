@@ -28,7 +28,7 @@ but if i fix each group on its own and make sure they have the same number of li
 - 1998–2000: The foundation [produced no report](https://web.archive.org/web/20100612122340/http://www.nathancummings.org:80/annual/index.html)
   for these years, so nothing to process.
 - 2001: https://web.archive.org/web/20050508123155/http://www.nathancummings.net:80/annual/ncf_2001_grantlist.pdf
-- 2002–2015: PDF format. Use OCR'd output. Note that 2014 and 2015 are not
+- 2002–2016: PDF format. Use OCR'd output. Note that 2014–2016 are not
   listed on the annual reports page, but are listed on the [Financial Statements
   page](http://www.nathancummings.org/about-the-foundation/Financial-Statments).
-- 2016–2017: See http://www.nathancummings.org/what-we-fund/grants
+- 2017: See http://www.nathancummings.org/what-we-fund/grants
