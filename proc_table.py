@@ -106,6 +106,7 @@ def main():
                 for tr in trs:
                     d = {}
                     d["url"] = SOURCE[fp]
+                    d["program"] = program_name(fp)
                     d["year"] = year
                     d["sub_area"] = label
 
@@ -146,6 +147,22 @@ def sub_area(table):
     if tag:
         return cleaned(tag.find("b").text)
     return ""
+
+
+def program_name(filepath):
+    program_part = filepath.split("-")[1].split(".")[0]
+    rename = {
+            "arts": "Arts",
+            "community": "Community",
+            "environment": "Environment",
+            "health": "Health",
+            "interprogram": "Interprogram",
+            "jewishlife": "Jewish life",
+            "presidential": "Presidential grant",
+            "prior": "Prior grant",
+            "researchdevelopmentevaluation": "Research, Development & Evaluation Grant",
+            }
+    return rename[program_part]
 
 
 def cleaned(s):
