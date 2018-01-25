@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
+import bs4
 import re
 import sys
 import csv
@@ -42,6 +43,17 @@ SOURCE = {
         }
 
 
+# These are the files that use a <br>-delimited list. The other ones use
+# separate paragraphs (<p> tags).
+br_style = {
+        "data/1996-arts.html",
+        "data/1996-environment.html",
+        "data/1996-health.html",
+        "data/1996-interprogram.html",
+        "data/1996-jewishlife.html",
+        }
+
+
 def main():
     fieldnames = ["grantee", "grantee_location", "url", "program",
                   "sub_area", "purpose", "year",
@@ -53,24 +65,27 @@ def main():
         with open(fp, "r") as f:
             soup = BeautifulSoup(f, "lxml")
             year = int(fp[len("data/"):len("data/YYYY")])
-            # if year == 1995:
-                # for grant in soup.find_all("p"):
-            if year == 1996:
+            if fp in br_style:
                 for grant in split_on_br(soup):
-                    d = {}
-                    d["program"] = program_name(fp)
-                    d["year"] = year
-                    gsoup = BeautifulSoup(grant, "lxml")
-                    grantee = gsoup.find("b")
-                    if grantee:
-                        location_amount = grantee.next_sibling
-                        grantee = cleaned(grantee.text)
-                        d["grantee"] = grantee
-                        lst = list(filter(lambda x: x not in ["", "."],
-                                          cleaned(location_amount).split(",")))
-                        if lst and bad_money(lst):
-                            print(lst)
-                        writer.writerow(d)
+                    purpose, grantee, location_amount = grant
+                    if grant == (['\n'], None, []):
+                        pass
+                    elif not grantee:
+                        print(fp, grant, file=sys.stderr)
+                    else:
+                        d = {"program": program_name(fp),
+                             "year": year,
+                             # "url": SOURCE[fp],
+                             "purpose": " ".join(map(cleaned, purpose)),
+                             "grantee": cleaned(grantee.text)}
+                        la_str = " ".join(map(cleaned, location_amount))
+                        print(fp,
+                                #first_dollar(la_str), find_location(la_str),
+                              find_extra(la_str), file=sys.stderr)
+                        # writer.writerow(d)
+            else:
+                for grant in soup.find_all("p"):
+                    pass
 
 
 def split_on_br(soup):
@@ -92,6 +107,41 @@ def split_on_br(soup):
     return grants
 
 
+def first_dollar(string):
+    """Find and return the first dollar amount in string."""
+    m = re.match(r"[^$]*\$([0-9,]+)", string)
+    if m:
+        return int(m.group(1).replace(",", ""))
+    return ""
+
+
+def find_location(string):
+    """Find and return the location in string."""
+    dollar = string.find("$")
+    if dollar > 0:
+        loc = string[:dollar].strip()
+        if loc.endswith(","):
+            loc = loc[:-1]
+        if loc.startswith(","):
+            loc = loc[1:].strip()
+        return loc
+    return ""
+
+
+def find_extra(string):
+    """Find extra information about the grant, appearing after the first dollar
+    amount."""
+    result = ""
+    dollar = string.find("$")
+    if dollar > 0:
+        space = string.find(" ", dollar)
+        if space > 0:
+            result = string[space:].strip()
+            if result.startswith("(") and result.endswith(")"):
+                result = result[1:-1]
+    return result
+
+
 def program_name(filepath):
     program_part = filepath.split("-")[1].split(".")[0]
     rename = {
@@ -111,6 +161,8 @@ def program_name(filepath):
 def cleaned(s):
     if s is None:
         return ""
+    if isinstance(s, bs4.element.Tag):
+        return cleaned(s.text)
     try:
         result = re.sub(r"\s+", " ", s).strip()
     except:
