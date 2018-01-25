@@ -77,12 +77,10 @@ SOURCE = {
 
 
 def main():
-
     fieldnames = ["grantee", "grantee_location", "url", "program",
                   "sub_area", "purpose", "year",
                   "prev_year_eoy_grants_payable", "same_year_awards",
                   "same_year_payments", "same_year_eoy_grants_payable"]
-
     writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
 
     for fp in FILE_PATHS:
