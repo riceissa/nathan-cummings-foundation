@@ -16,19 +16,12 @@ but if i fix each group on its own and make sure they have the same number of li
 
 # Summary
 
-- 1991–1994: Table format, where each program has a separate page, and each
-  page has several tables (for sub-areas of the program). To process, use
-  `proc_table.py` or the tab-separated text files. (I haven't decided which is
-  better yet.)
-- 1995–1996: Paragraph format, where each program has a separate page, and each page
-  has `<br>`-separated lines containing grant information. The grantee is in
-  bold, the amounts usually show up at the end of the line, etc., so there is
-  some regularity. To process, use `proc_list.py`.
-- 1997: There is an annual report but no grants list.
-- 1998–2000: The foundation [produced no report](https://web.archive.org/web/20100612122340/http://www.nathancummings.org:80/annual/index.html)
-  for these years, so nothing to process.
-- 2001: https://web.archive.org/web/20050508123155/http://www.nathancummings.net:80/annual/ncf_2001_grantlist.pdf
-- 2002–2016: PDF format. Use OCR'd output. Note that 2014–2016 are not
-  listed on the annual reports page, but are listed on the [Financial Statements
-  page](http://www.nathancummings.org/about-the-foundation/Financial-Statments).
-- 2017: See http://www.nathancummings.org/what-we-fund/grants
+|Year|Format|Source|Script to produce CSV|
+|----|------|------|---------------------|
+|1991–1994|Table format, where each program has a separate page, and each page has several tables (for sub-areas of the program).||`proc_table.py` or the tab-separated text files. (I haven't decided which is better yet.)|
+|1995–1996|Paragraph format, where each program has a separate page, and each page has `<br>`-separated lines containing grant information. The grantee is in bold, the amounts usually show up at the end of the line, etc., so there is some regularity.||`proc_list.py`|
+|1997|There is an annual report but no grants list.|||
+|1998–2000|The foundation [produced no report](https://web.archive.org/web/20100612122340/http://www.nathancummings.org:80/annual/index.html) for these years, so nothing to process.|||
+|2001|Strange PDF|[Source](https://web.archive.org/web/20050508123155/http://www.nathancummings.net:80/annual/ncf_2001_grantlist.pdf)||
+|2002–2016|PDF format. Use OCR'd output.|Note that 2014–2016 are not listed on the annual reports page, but are listed on the [Financial Statements page](http://www.nathancummings.org/about-the-foundation/Financial-Statments).||
+|2017|Strange PDF|[Source](http://www.nathancummings.org/what-we-fund/grants)||
