@@ -88,6 +88,7 @@ def main():
     for fp in FILE_PATHS:
         with open(fp, "r") as f:
             soup = BeautifulSoup(f, "lxml")
+            year = int(fp[len("data/"):len("data/YYYY")])
             for table in soup.find_all("table"):
                 trs = table.find_all("tr")
                 try:
@@ -95,13 +96,17 @@ def main():
                 except IndexError:
                     # This is a table with just one row, so skip it
                     continue
-                if num_col != 5:
+                if year in [1991, 1992] and num_col != 5:
+                    # These two years have five columns
+                    continue
+                if year in [1993, 1994] and num_col != 4:
+                    # These two years have four columns
                     continue
                 label = sub_area(table)
                 for tr in trs:
                     d = {}
                     d["url"] = SOURCE[fp]
-                    d["year"] = fp[len("data/"):len("data/YYYY")]
+                    d["year"] = year
                     d["sub_area"] = label
 
                     cols = tr.find_all("td")
@@ -111,11 +116,24 @@ def main():
                     except:
                         pass
                     d["grantee"] = cleaned(cols[0].text)
-                    # amount = cols[3].replace(",", "")
-                    # d["prev_year_eoy_grants_payable"]
-                    # d["same_year_awards"]
-                    # d["same_year_payments"]
-                    # d["same_year_eoy_grants_payable"]
+                    d["purpose"] = cleaned(cols[1].text)
+                    if year in [1991, 1992]:
+                        d["same_year_awards"] = (cleaned(cols[2].text)
+                                                 .replace(",", "")
+                                                 .replace(",", ""))
+                        d["same_year_payments"] = (cleaned(cols[3].text)
+                                                   .replace(",", "")
+                                                   .replace(",", ""))
+                        d["same_year_eoy_grants_payable"] = (cleaned(cols[4].text)
+                                                             .replace(",", "")
+                                                             .replace(",", ""))
+                    if year in [1993, 1994]:
+                        d["same_year_awards"] = (cleaned(cols[2].text)
+                                                 .replace(",", "")
+                                                 .replace("$", ""))
+                        d["same_year_payments"] = (cleaned(cols[3].text)
+                                                   .replace(",", "")
+                                                   .replace("$", ""))
                     writer.writerow(d)
 
 
