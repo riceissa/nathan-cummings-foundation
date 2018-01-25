@@ -56,7 +56,7 @@ br_style = {
 
 def main():
     fieldnames = ["grantee", "grantee_location", "url", "program",
-                  "sub_area", "purpose", "year",
+                  "sub_area", "purpose", "year", "notes",
                   "prev_year_eoy_grants_payable", "same_year_awards",
                   "same_year_payments", "same_year_eoy_grants_payable"]
     writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
@@ -73,16 +73,16 @@ def main():
                     elif not grantee:
                         print(fp, grant, file=sys.stderr)
                     else:
+                        la_str = " ".join(map(cleaned, location_amount))
                         d = {"program": program_name(fp),
                              "year": year,
-                             # "url": SOURCE[fp],
+                             "url": SOURCE[fp],
                              "purpose": " ".join(map(cleaned, purpose)),
+                             "notes": find_extra(la_str),
+                             "grantee_location": find_location(la_str),
+                             "same_year_awards": first_dollar(la_str),
                              "grantee": cleaned(grantee.text)}
-                        la_str = " ".join(map(cleaned, location_amount))
-                        print(fp,
-                                #first_dollar(la_str), find_location(la_str),
-                              find_extra(la_str), file=sys.stderr)
-                        # writer.writerow(d)
+                        writer.writerow(d)
             else:
                 for grant in soup.find_all("p"):
                     pass
