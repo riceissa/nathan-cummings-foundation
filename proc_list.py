@@ -56,8 +56,7 @@ def main():
             # if year == 1995:
                 # for grant in soup.find_all("p"):
             if year == 1996:
-                pdb.set_trace()
-                for grant in soup.prettify().split("<br/>"):
+                for grant in split_on_br(soup):
                     d = {}
                     d["program"] = program_name(fp)
                     d["year"] = year
@@ -74,24 +73,22 @@ def main():
                         writer.writerow(d)
 
 
-def split_on_br(tag):
+def split_on_br(soup):
     grants = []
-    for br in tag.find_all("br"):
-        curr = br
+    for br in soup.find_all("br"):
+        curr = br.next_sibling
+        first = []
+        bold = None
+        last = []
         while curr is not None and curr.name != "br":
-            pass
-
-
-    while curr is not None:
-        if curr.name == "br":
-            is_head = True
-            continue
-        else:
-            if is_head:
-                is_head = False
-                grants.append()
+            if curr.name != "b" and bold is None:
+                first += [curr]
+            elif curr.name == "b" and bold is None:
+                bold = curr
             else:
-                pass
+                last += [curr]
+            curr = curr.next_sibling
+        grants.append((first, bold, last))
     return grants
 
 
