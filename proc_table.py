@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import pdb
-
 import re
 import csv
 import sys
 from bs4 import BeautifulSoup
+
+import util
 
 
 FILE_PATHS = [
@@ -77,11 +77,7 @@ SOURCE = {
 
 
 def main():
-    fieldnames = ["grantee", "grantee_location", "url", "program",
-                  "sub_area", "purpose", "year", "notes",
-                  "prev_year_eoy_grants_payable", "same_year_awards",
-                  "same_year_payments", "same_year_eoy_grants_payable"]
-    writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
+    writer = csv.DictWriter(sys.stdout, fieldnames=util.fieldnames)
 
     for fp in FILE_PATHS:
         with open(fp, "r") as f:
@@ -109,28 +105,27 @@ def main():
                     d["sub_area"] = label
 
                     cols = tr.find_all("td")
-                    # pdb.set_trace()
                     try:
-                        d["grantee_location"] = cleaned(cols[0].i.extract().text)
+                        d["grantee_location"] = util.cleaned(cols[0].i.extract().text)
                     except:
                         pass
-                    d["grantee"] = cleaned(cols[0].text)
-                    d["purpose"] = cleaned(cols[1].text)
+                    d["grantee"] = util.cleaned(cols[0].text)
+                    d["purpose"] = util.cleaned(cols[1].text)
                     if year in [1991, 1992]:
-                        d["same_year_awards"] = (cleaned(cols[2].text)
+                        d["same_year_awards"] = (util.cleaned(cols[2].text)
                                                  .replace(",", "")
                                                  .replace(",", ""))
-                        d["same_year_payments"] = (cleaned(cols[3].text)
+                        d["same_year_payments"] = (util.cleaned(cols[3].text)
                                                    .replace(",", "")
                                                    .replace(",", ""))
-                        d["same_year_eoy_grants_payable"] = (cleaned(cols[4].text)
+                        d["same_year_eoy_grants_payable"] = (util.cleaned(cols[4].text)
                                                              .replace(",", "")
                                                              .replace(",", ""))
                     if year in [1993, 1994]:
-                        d["same_year_awards"] = (cleaned(cols[2].text)
+                        d["same_year_awards"] = (util.cleaned(cols[2].text)
                                                  .replace(",", "")
                                                  .replace("$", ""))
-                        d["same_year_payments"] = (cleaned(cols[3].text)
+                        d["same_year_payments"] = (util.cleaned(cols[3].text)
                                                    .replace(",", "")
                                                    .replace("$", ""))
                     writer.writerow(d)
@@ -143,7 +138,7 @@ def sub_area(table):
     while tag is not None and tag.find("b") in [None, -1]:
         tag = tag.previous_sibling
     if tag:
-        return cleaned(tag.find("b").text)
+        return util.cleaned(tag.find("b").text)
     return ""
 
 
@@ -160,17 +155,6 @@ def program_name(filepath):
             "prior": "Prior grant",
             "researchdevelopmentevaluation": "Research, Development & Evaluation Grant",
             }[program_part]
-
-
-def cleaned(s):
-    if s is None:
-        return ""
-    try:
-        result = re.sub(r"\s+", " ", s).strip()
-    except:
-        print(type(s), s, file=sys.stderr)
-        raise TypeError
-    return result
 
 
 if __name__ == "__main__":

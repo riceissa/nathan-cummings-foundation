@@ -7,6 +7,7 @@ import sys
 import csv
 import pdb
 
+import util
 
 FILE_PATHS = [
         "data/1995-arts.html",
@@ -55,11 +56,7 @@ br_style = {
 
 
 def main():
-    fieldnames = ["grantee", "grantee_location", "url", "program",
-                  "sub_area", "purpose", "year", "notes",
-                  "prev_year_eoy_grants_payable", "same_year_awards",
-                  "same_year_payments", "same_year_eoy_grants_payable"]
-    writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
+    writer = csv.DictWriter(sys.stdout, fieldnames=util.fieldnames)
 
     for fp in FILE_PATHS:
         with open(fp, "r") as f:
@@ -73,15 +70,15 @@ def main():
                     elif not grantee:
                         print(fp, grant, file=sys.stderr)
                     else:
-                        la_str = " ".join(map(cleaned, location_amount))
+                        la_str = " ".join(map(util.cleaned, location_amount))
                         d = {"program": program_name(fp),
                              "year": year,
                              "url": SOURCE[fp],
-                             "purpose": " ".join(map(cleaned, purpose)),
+                             "purpose": " ".join(map(util.cleaned, purpose)),
                              "notes": find_extra(la_str),
                              "grantee_location": find_location(la_str),
                              "same_year_awards": first_dollar(la_str),
-                             "grantee": cleaned(grantee.text)}
+                             "grantee": util.cleaned(grantee.text)}
                         writer.writerow(d)
             else:
                 for grant in soup.find_all("p"):
@@ -156,26 +153,6 @@ def program_name(filepath):
             "researchdevelopmentevaluation": "Research, Development & Evaluation Grant",
             }
     return rename[program_part]
-
-
-def cleaned(s):
-    if s is None:
-        return ""
-    if isinstance(s, bs4.element.Tag):
-        return cleaned(s.text)
-    try:
-        result = re.sub(r"\s+", " ", s).strip()
-    except:
-        print(type(s), s, file=sys.stderr)
-        raise TypeError
-    return result
-
-
-def bad_money(l):
-    for s in l:
-        if "$" in s and not s.strip().startswith("$"):
-            return s
-    return ""
 
 
 if __name__ == "__main__":
