@@ -98,11 +98,12 @@ def main():
                     continue
                 label = sub_area(table)
                 for tr in trs:
-                    d = {}
-                    d["url"] = SOURCE[fp]
-                    d["program"] = program_name(fp)
-                    d["year"] = year
-                    d["sub_area"] = label
+                    d = {
+                            "url": SOURCE[fp],
+                            "program": program_name(fp),
+                            "year": year,
+                            "sub_area": label,
+                            }
 
                     cols = tr.find_all("td")
                     try:
