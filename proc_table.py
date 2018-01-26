@@ -3,6 +3,7 @@
 import re
 import csv
 import sys
+import bs4
 from bs4 import BeautifulSoup
 
 import util
@@ -126,12 +127,14 @@ def main():
 def sub_area(table):
     """Find the sub-area of the grant. These are given right above the table in
     bold."""
-    tag = table.previous_sibling
-    while tag is not None and tag.find("b") in [None, -1]:
-        tag = tag.previous_sibling
-    if tag:
-        return util.cleaned(tag.find("b").text)
-    return ""
+    label = table.previous_sibling
+
+    # Keep going until we find a tag
+    while isinstance(label, bs4.element.NavigableString):
+        label = label.previous_sibling
+
+    assert label.name == "b"
+    return util.cleaned(label)
 
 
 def program_name(filepath):
