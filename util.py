@@ -17,7 +17,7 @@ def cleaned(s):
     return result
 
 
-fieldnames = ["grantee", "grantee_location", "url", "program",
-              "sub_area", "purpose", "year", "notes",
+fieldnames = ["year", "program", "sub_area", "grantee", "grantee_location",
+              "url", "purpose", "notes",
               "prev_year_eoy_grants_payable", "same_year_awards",
               "same_year_payments", "same_year_eoy_grants_payable"]
