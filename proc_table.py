@@ -149,7 +149,7 @@ def sub_area(table):
 
 def program_name(filepath):
     program_part = filepath.split("-")[1].split(".")[0]
-    rename = {
+    return {
             "arts": "Arts",
             "community": "Community",
             "environment": "Environment",
@@ -159,8 +159,7 @@ def program_name(filepath):
             "presidential": "Presidential grant",
             "prior": "Prior grant",
             "researchdevelopmentevaluation": "Research, Development & Evaluation Grant",
-            }
-    return rename[program_part]
+            }[program_part]
 
 
 def cleaned(s):
