@@ -104,7 +104,9 @@ def main():
                             }
 
                     try:
-                        d["grantee_location"] = util.cleaned(cols[0].i.extract().text)
+                        d["grantee_location"] = util.cleaned(cols[0].i
+                                                                    .extract()
+                                                                    .text)
                     except:
                         pass
                     d["grantee"] = util.cleaned(cols[0].text)
