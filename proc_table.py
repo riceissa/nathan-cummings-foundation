@@ -85,19 +85,16 @@ def main():
             year = int(fp[len("data/"):len("data/YYYY")])
             for table in soup.find_all("table"):
                 trs = table.find_all("tr")
-                try:
-                    num_col = len(trs[1].find_all("td"))
-                except IndexError:
-                    # This is a table with just one row, so skip it
-                    continue
-                if year in [1991, 1992] and num_col != 5:
-                    # These two years have five columns
-                    continue
-                if year in [1993, 1994] and num_col != 4:
-                    # These two years have four columns
-                    continue
+                num_col = len(trs[1].find_all("td"))
+                if year in [1991, 1992]:
+                    assert num_col == 5, (fp, num_col)
+                if year in [1993, 1994]:
+                    assert num_col == 4, (fp, num_col)
                 label = sub_area(table)
                 for tr in trs:
+                    cols = tr.find_all("td")
+                    if util.cleaned(cols[0]) == "RECIPIENT":
+                        continue
                     d = {
                             "url": SOURCE[fp],
                             "program": program_name(fp),
@@ -105,7 +102,6 @@ def main():
                             "sub_area": label,
                             }
 
-                    cols = tr.find_all("td")
                     try:
                         d["grantee_location"] = util.cleaned(cols[0].i.extract().text)
                     except:
@@ -113,22 +109,17 @@ def main():
                     d["grantee"] = util.cleaned(cols[0].text)
                     d["purpose"] = util.cleaned(cols[1].text)
                     if year in [1991, 1992]:
-                        d["same_year_awards"] = (util.cleaned(cols[2].text)
-                                                 .replace(",", "")
-                                                 .replace(",", ""))
-                        d["same_year_payments"] = (util.cleaned(cols[3].text)
-                                                   .replace(",", "")
-                                                   .replace(",", ""))
-                        d["same_year_eoy_grants_payable"] = (util.cleaned(cols[4].text)
-                                                             .replace(",", "")
-                                                             .replace(",", ""))
+                        d["same_year_awards"] = amount(cols[2].text)
+                        d["same_year_payments"] = amount(cols[3].text)
+                        d["same_year_eoy_grants_payable"] = amount(cols[4].text)
+                        assert amount(cols[2].text) is not None, fp
+                        assert amount(cols[3].text) is not None, fp
+                        assert amount(cols[4].text) is not None, fp
                     if year in [1993, 1994]:
-                        d["same_year_awards"] = (util.cleaned(cols[2].text)
-                                                 .replace(",", "")
-                                                 .replace("$", ""))
-                        d["same_year_payments"] = (util.cleaned(cols[3].text)
-                                                   .replace(",", "")
-                                                   .replace("$", ""))
+                        d["same_year_awards"] = amount(cols[2].text)
+                        d["same_year_payments"] = amount(cols[3].text)
+                        assert amount(cols[2].text) is not None, fp
+                        assert amount(cols[3].text) is not None, fp
                     writer.writerow(d)
 
 
@@ -156,6 +147,20 @@ def program_name(filepath):
             "prior": "Prior grant",
             "researchdevelopmentevaluation": "Research, Development & Evaluation Grant",
             }[program_part]
+
+
+def amount(x):
+    x = util.cleaned(x).replace("$", "").replace("*", "")
+    if not x:
+        return 0
+    m1 = re.match(r"^((\d{1,3},)?\d{1,3},)?\d{1,3}$", x)
+    if m1:
+        return int(x.replace(",", ""))
+    m2 = re.match(r"^\(((\d{1,3},)?\d{1,3},)?\d{1,3}\)$", x)
+    if m2:
+        return -int(x.replace("(", "").replace(")", "").replace(",", ""))
+    print(x, file=sys.stderr)
+    return None
 
 
 if __name__ == "__main__":
