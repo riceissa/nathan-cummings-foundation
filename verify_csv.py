@@ -5,7 +5,7 @@ import pandas
 import util
 
 def main():
-    df = pandas.read_csv("data.csv", names=util.fieldnames)
+    df = pandas.read_csv("all_data.csv", names=util.fieldnames)
     print(df.groupby('year')["prev_year_eoy_grants_payable",
                              "same_year_awards",
                              "same_year_payments",
