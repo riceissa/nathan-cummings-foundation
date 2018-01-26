@@ -34,7 +34,7 @@ Bay Area Video Coalition - 100,000 100,000 -
 Better Government Association - 20,000 20,000 -
 Black Filmmakers Foundation - 100,000 100,000 -
 Boca Raton Museum of Art, Inc. - 8,000 8,000 -
-Bread and Roses Cultural Project, Inc. - 70.000 70,000 -
+Bread and Roses Cultural Project, Inc. - 70,000 70,000 -
 Bronx Museum of the Arts, The - 100,000 100,000 -
 Business and Professional People for the Public Interest 20,000 - 20,000 -
 Business Leaders for Sensible Priorities Information Fund - 10,000 10,000 -
@@ -190,7 +190,7 @@ Metropolitan Opera Association, Inc. - 5,000 5,000 -
 Mexican Fine Arts Center Museum - 100,000 100,000 -
 Mirman School for Gifted Children - 10,000 10,000 -
 Mississippi Workers Center for Human Rights - 50,000 50,000 -
-More Than Money, Inc. - 5.500 5,500 -
+More Than Money, Inc. - 5,500 5,500 -
 Mr. Holland’s Opus Foundation - 7,500 7,500 -
 Muscular Dystrophy - 15,000 15,000 -
 Museum of Chinese in the Americas - 2,000 2,000 -
@@ -316,4 +316,4 @@ Working Partnerships USA - 105,000 105,000 -
 Working Theater Company, Inc., The - 50,000 50,000 -
 World Institute of Holistic Therapies, Inc. 7,000 3,000 10,000 -
 World Resources Institute - 110,000 110,000 -
-Yale University - 30.000 30.000 -
+Yale University - 30,000 30,000 -

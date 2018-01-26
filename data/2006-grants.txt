@@ -37,7 +37,7 @@ Board of Trustees of the University of Illinois - 40,000 40,000 -
 BoardSource - 5,000 5,000 -
 Brandeis University - 2,500 2,500 -
 Bread and Roses Cultural Project, Inc. 100,000 - 100,000 -
-Brent Shapiro Foundation for Drug Awareness - 40.000 40,000 -
+Brent Shapiro Foundation for Drug Awareness - 40,000 40,000 -
 Brit Tzedek v'Shanm - 200,000 100,000 100,000
 Broadtree Adventures in Education - 15,000 15,000 -
 Brotherhood/Sister Sol, Inc., The - 150,000 75,000 75,000
@@ -191,7 +191,7 @@ National Senior Citizens Law Center - 100,000 100,000 -
 National Video Resources, Inc. - 1,000 1,000 -
 National Women's Law Center - 450,000 285,000 165,000
 Native American Community Board - 25,000 25,000 -
-Natural Capital Institute - 250.000 250.000 -
+Natural Capital Institute - 250,000 250,000 -
 Neighborhood Funders Group - 7,000 7,000 -
 New Israel Fund - 1,277,700 1,277,700 -
 New Orleans Jazz Orchestra, Inc. - 75,000 75,000 -
@@ -268,7 +268,7 @@ University of Massachusetts Foundation - 75,000 75,000 -
 University of Wisconsin, Madison - 415,500 415,500 -
 Urban Justice Center - 100,000 100,000 -
 Vallecitos Mountain Refuge - 80,000 80,000 -
-Video Action, Inc. - 50.000 50.000 -
+Video Action, Inc. - 50,000 50,000 -
 Western Organization of Resource Councils Education Project - 175,000 175,000 -
 WGBH Educational Foundation - 200,000 200,000 -
 Wildlife Conservation Network, Inc. - 10,000 10,000 -
