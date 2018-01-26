@@ -212,7 +212,7 @@ The Brotherhood/Sister Sol, Inc. 100,000 - 100,000 -
 The Center for Media Justice - 100,000 100,000 -
 The Center for Progressive Leadership - 250,000 250,000 -
 The Cleveland Foundation - 250,000 250,000 -
-The Crenulated Company, Ltd. 1,550 1,550
+The Crenulated Company, Ltd. - 1,550 1,550 -
 The District of Columbia Jewish Community Center Incorporated - 10,000 10,000 -
 The International Coalition of Historic Site Museums of Conscience - 65,000 65,000 -
 The Jewish Federations of North America Inc. - 15,000 15,000 -
