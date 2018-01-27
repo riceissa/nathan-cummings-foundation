@@ -98,6 +98,9 @@ def write_grant(grant, sub_area, file_path, writer):
     year = int(file_path[len("data/"):len("data/YYYY")])
     if grant == (['\n'], None, []):
         pass
+    elif (any(map(lambda x: x.name == "h2", grant[0])) and
+        grant[1] is None and grant[2] == []):
+        pass
     elif not grantee:
         print(file_path, grant, file=sys.stderr)
     else:
