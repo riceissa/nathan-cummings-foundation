@@ -63,13 +63,19 @@ def main():
             soup = BeautifulSoup(f, "lxml")
             if fp in br_style:
                 for br in soup.find_all("br"):
-                    write_grant(partitioned_line(br.next_sibling), fp, writer)
+                    write_grant(partitioned_line(br.next_sibling),
+                                find_sub_area(br), fp, writer)
             else:
-                for grant in soup.find_all("p"):
-                    pdb.set_trace()
-                    write_grant(partitioned_line(list(grant.children)[0]),
-                                      fp, writer)
+                for para in soup.find_all("p"):
+                    write_grant(partitioned_line(list(para.children)[0]),
+                                find_sub_area(para), fp, writer)
 
+
+def find_sub_area(elem):
+    curr = elem
+    while curr is not None and curr.name != "h2":
+        curr = curr.previous_sibling
+    return util.cleaned(curr)
 
 def partitioned_line(elem):
     first = []
@@ -87,7 +93,7 @@ def partitioned_line(elem):
     return (first, bold, last)
 
 
-def write_grant(grant, file_path, writer):
+def write_grant(grant, sub_area, file_path, writer):
     purpose, grantee, location_amount = grant
     year = int(file_path[len("data/"):len("data/YYYY")])
     if grant == (['\n'], None, []):
@@ -97,6 +103,7 @@ def write_grant(grant, file_path, writer):
     else:
         la_str = " ".join(map(util.cleaned, location_amount))
         d = {"program": program_name(file_path),
+             "sub_area": sub_area,
              "year": year,
              "url": SOURCE[file_path],
              "purpose": " ".join(map(util.cleaned, purpose)),
