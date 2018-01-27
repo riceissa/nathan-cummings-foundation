@@ -79,29 +79,36 @@ def main():
                              "grantee_location": find_location(la_str),
                              "same_year_awards": first_dollar(la_str),
                              "grantee": util.cleaned(grantee.text)}
-                        writer.writerow(d)
+                        # writer.writerow(d)
             else:
                 for grant in soup.find_all("p"):
-                    pass
+                    try:
+                        print(partitioned_line(list(grant.children)[0]))
+                    except:
+                        pass
 
 
 def split_on_br(soup):
     grants = []
     for br in soup.find_all("br"):
-        curr = br.next_sibling
-        first = []
-        bold = None
-        last = []
-        while curr is not None and curr.name != "br":
-            if curr.name != "b" and bold is None:
-                first += [curr]
-            elif curr.name == "b" and bold is None:
-                bold = curr
-            else:
-                last += [curr]
-            curr = curr.next_sibling
-        grants.append((first, bold, last))
+        grants.append(partitioned_line(br.next_sibling))
     return grants
+
+
+def partitioned_line(elem):
+    first = []
+    bold = None
+    last = []
+    curr = elem
+    while curr is not None and curr.name != "br":
+        if curr.name != "b" and bold is None:
+            first += [curr]
+        elif curr.name == "b" and bold is None:
+            bold = curr
+        else:
+            last += [curr]
+        curr = curr.next_sibling
+    return (first, bold, last)
 
 
 def first_dollar(string):
