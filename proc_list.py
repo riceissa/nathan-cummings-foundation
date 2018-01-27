@@ -5,7 +5,6 @@ import bs4
 import re
 import sys
 import csv
-import pdb
 
 import util
 
@@ -114,7 +113,7 @@ def write_grant(grant, sub_area, file_path, writer):
              "grantee_location": find_location(la_str),
              "same_year_awards": first_dollar(la_str),
              "grantee": util.cleaned(grantee.text)}
-        # writer.writerow(d)
+        writer.writerow(d)
 
 
 def first_dollar(string):
