@@ -62,18 +62,13 @@ def main():
         with open(fp, "r") as f:
             soup = BeautifulSoup(f, "lxml")
             if fp in br_style:
-                for grant in split_on_br(soup):
-                    write_grant(grant, fp, writer)
+                for br in soup.find_all("br"):
+                    write_grant(partitioned_line(br.next_sibling), fp, writer)
             else:
                 for grant in soup.find_all("p"):
-                    print(partitioned_line(list(grant.children)[0]))
-
-
-def split_on_br(soup):
-    grants = []
-    for br in soup.find_all("br"):
-        grants.append(partitioned_line(br.next_sibling))
-    return grants
+                    pdb.set_trace()
+                    write_grant(partitioned_line(list(grant.children)[0]),
+                                      fp, writer)
 
 
 def partitioned_line(elem):
