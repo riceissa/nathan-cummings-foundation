@@ -61,31 +61,12 @@ def main():
     for fp in FILE_PATHS:
         with open(fp, "r") as f:
             soup = BeautifulSoup(f, "lxml")
-            year = int(fp[len("data/"):len("data/YYYY")])
             if fp in br_style:
                 for grant in split_on_br(soup):
-                    purpose, grantee, location_amount = grant
-                    if grant == (['\n'], None, []):
-                        pass
-                    elif not grantee:
-                        print(fp, grant, file=sys.stderr)
-                    else:
-                        la_str = " ".join(map(util.cleaned, location_amount))
-                        d = {"program": program_name(fp),
-                             "year": year,
-                             "url": SOURCE[fp],
-                             "purpose": " ".join(map(util.cleaned, purpose)),
-                             "notes": find_extra(la_str),
-                             "grantee_location": find_location(la_str),
-                             "same_year_awards": first_dollar(la_str),
-                             "grantee": util.cleaned(grantee.text)}
-                        # writer.writerow(d)
+                    write_grant(grant, fp, writer)
             else:
                 for grant in soup.find_all("p"):
-                    try:
-                        print(partitioned_line(list(grant.children)[0]))
-                    except:
-                        pass
+                    print(partitioned_line(list(grant.children)[0]))
 
 
 def split_on_br(soup):
@@ -109,6 +90,26 @@ def partitioned_line(elem):
             last += [curr]
         curr = curr.next_sibling
     return (first, bold, last)
+
+
+def write_grant(grant, file_path, writer):
+    purpose, grantee, location_amount = grant
+    year = int(file_path[len("data/"):len("data/YYYY")])
+    if grant == (['\n'], None, []):
+        pass
+    elif not grantee:
+        print(file_path, grant, file=sys.stderr)
+    else:
+        la_str = " ".join(map(util.cleaned, location_amount))
+        d = {"program": program_name(file_path),
+             "year": year,
+             "url": SOURCE[file_path],
+             "purpose": " ".join(map(util.cleaned, purpose)),
+             "notes": find_extra(la_str),
+             "grantee_location": find_location(la_str),
+             "same_year_awards": first_dollar(la_str),
+             "grantee": util.cleaned(grantee.text)}
+        # writer.writerow(d)
 
 
 def first_dollar(string):
