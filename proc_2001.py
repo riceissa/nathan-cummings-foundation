@@ -13,16 +13,24 @@ def main():
     grants = []
     with open("data/2001-grants.txt", "r") as f:
         grant = ""
+        program = ""
+        sub_area = ""
         for line in f:
-            grant += line
-            if not line.strip():
-                grants.append(grant.strip())
-                grant = ""
+            if line.startswith("# "):
+                program = line[len("# "):].strip()
+            elif line.startswith("## "):
+                sub_area = line[len("## "):].strip()
+            else:
+                grant += line
+                if not line.strip():
+                    grants.append((program, sub_area, grant.strip()))
+                    grant = ""
     for g in map(parsed_grant, grants):
         writer.writerow(g)
 
 
-def parsed_grant(grant):
+def parsed_grant(grant_tuple):
+    program, sub_area, grant = grant_tuple
     m = re.match(r"([^()]+)\(([^)]+)\)", grant)
     m2 = re.search(r"\$((\d{1,3},)?\d{1,3},)?\d{1,3}$", grant)
     grantee = ""
@@ -38,6 +46,8 @@ def parsed_grant(grant):
     if m2:
         amount = int(m2.group(0).strip().replace("$", "").replace(",", ""))
     return {"year": 2001,
+            "program": program,
+            "sub_area": sub_area,
             "grantee": grantee,
             "grantee_location": location,
             "same_year_awards": amount,
