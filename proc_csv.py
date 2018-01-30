@@ -2,9 +2,12 @@
 
 import csv
 
+import util
+
+
 def main():
     with open("all_data.csv", "r") as f:
-        reader = csv.DictReader(f)
+        reader = csv.DictReader(f, fieldnames=util.fieldnames)
 
         first = True
         print("""insert into donations (donor, donee, amount, donation_date,
@@ -34,6 +37,20 @@ def main():
             ]) + ")")
             first = False
         print(";")
+
+
+def mysql_quote(x):
+    '''
+    Quote the string x using MySQL quoting rules. If x is the empty string,
+    return "NULL". Probably not safe against maliciously formed strings, but
+    whatever; our input is fixed and from a basically trustable source..
+    '''
+    if not x:
+        return "NULL"
+    x = x.replace("\\", "\\\\")
+    x = x.replace("'", "''")
+    x = x.replace("\n", "\\n")
+    return "'{}'".format(x)
 
 
 if __name__ == "__main__":
