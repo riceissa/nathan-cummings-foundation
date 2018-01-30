@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pdb
 import re
 
 import util
@@ -15,7 +16,7 @@ def main():
                 grants.append(grant.strip())
                 grant = ""
     for g in map(parsed_grant, grants):
-        print(g)
+        print("    ", g)
 
 
 def parsed_grant(grant):
@@ -28,17 +29,28 @@ def parsed_grant(grant):
     if m:
         grantee = title_cased(util.cleaned(m.group(1)))
         location = title_cased(util.cleaned(m.group(2)))
-        (duration) = parsed_middle_part(grant[len(m.group(0)):grant.find(". . .")].strip())
+        (duration, support_type,
+         purpose) = parsed_middle_part(
+                        grant[len(m.group(0)):grant.find(". . .")].strip())
     if m2:
         amount = int(m2.group(0).strip().replace("$", "").replace(",", ""))
-    return (grantee, location, amount, duration)
+    return (grantee, location, amount, duration, support_type, purpose)
 
 
 def parsed_middle_part(middle_part):
-    m = re.search(r"[ ]\d+[ ](year|years|month|months)$", middle_part)
+    m = re.search(r"""(.+)\n
+                      ((?:To|For|Multi).+)
+                      (\d+[ ](?:year|years|month|months)(?:$|\n))?""",
+                  middle_part, flags=re.DOTALL|re.VERBOSE)
+
+    duration = ""
+    support_type = ""
+    purpose = ""
     if m:
-        duration = m.group(0).strip()
-        return duration
+        support_type = util.cleaned(m.group(1))
+        purpose = util.cleaned(m.group(2))
+        duration = util.cleaned(m.group(3))
+    return (duration, support_type, purpose)
 
 
 def title_cased(s):
@@ -48,7 +60,9 @@ def title_cased(s):
                  "‘AINA": "‘Aina",
                  "CLAL-THE": "CLAL - The",
                  "CEC": "",
+                 "MPS": "",
                  "HUC-SKIRBALL": "HUC-Skirball",
+                 "SNITOW/KAUFMAN": "Snitow-Kaufman Productions",
                  "US": "",
                  "USA": "",
                  "USACTION": "USAction",
