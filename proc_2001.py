@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
-import pdb
 import re
+import csv
+import sys
 
 import util
 
 
 def main():
+    writer = csv.DictWriter(sys.stdout, fieldnames=util.fieldnames)
+
     grants = []
     with open("data/2001-grants.txt", "r") as f:
         grant = ""
@@ -16,7 +19,7 @@ def main():
                 grants.append(grant.strip())
                 grant = ""
     for g in map(parsed_grant, grants):
-        print("    ", g)
+        writer.writerow(g)
 
 
 def parsed_grant(grant):
@@ -34,22 +37,31 @@ def parsed_grant(grant):
                         grant[len(m.group(0)):grant.find(". . .")].strip())
     if m2:
         amount = int(m2.group(0).strip().replace("$", "").replace(",", ""))
-    return (grantee, location, amount, duration, support_type, purpose)
+    return {"year": 2001,
+            "grantee": grantee,
+            "grantee_location": location,
+            "same_year_awards": amount,
+            "duration": duration,
+            "support_type": support_type,
+            "purpose": purpose}
 
 
 def parsed_middle_part(middle_part):
-    m = re.search(r"""(.+)\n
-                      ((?:To|For|Multi).+)
-                      (\d+[ ](?:year|years|month|months)(?:$|\n))?""",
-                  middle_part, flags=re.DOTALL|re.VERBOSE)
-
     duration = ""
     support_type = ""
     purpose = ""
+
+    m_year = re.search(r"\d+[ ](?:year|years|month|months)$", middle_part)
+    if m_year:
+        duration = util.cleaned(m_year.group(0))
+        middle_part = middle_part[:m_year.start(0)]
+    m = re.search(r"""(?:(.+)\n)?
+                      ((?:To|For|Multi).+)""",
+                  middle_part, flags=re.DOTALL|re.VERBOSE|re.MULTILINE)
+
     if m:
         support_type = util.cleaned(m.group(1))
         purpose = util.cleaned(m.group(2))
-        duration = util.cleaned(m.group(3))
     return (duration, support_type, purpose)
 
 

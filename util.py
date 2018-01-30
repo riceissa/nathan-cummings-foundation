@@ -18,6 +18,6 @@ def cleaned(s):
 
 
 fieldnames = ["year", "program", "sub_area", "grantee", "grantee_location",
-              "url", "purpose", "notes",
+              "url", "duration", "support_type", "purpose", "notes",
               "prev_year_eoy_grants_payable", "same_year_awards",
               "same_year_payments", "same_year_eoy_grants_payable"]
