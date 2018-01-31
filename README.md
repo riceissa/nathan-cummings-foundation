@@ -1,8 +1,16 @@
+# Nathan Cummings Foundation
+
 This is for https://github.com/vipulnaik/donations
 
 Specific issue: https://github.com/vipulnaik/donations/issues/23
 
-# Summary
+## Instructions
+
+You should just be able to type `make` to build the SQL file. This first builds
+a CSV file with foundation-specific columns, then uses the CSV to build the
+SQL (with Donations List Website-specific columns).
+
+## Summary
 
 |Year|Format|Source|Script to produce CSV|
 |----|------|------|---------------------|
@@ -14,7 +22,7 @@ Specific issue: https://github.com/vipulnaik/donations/issues/23
 |2002–2016|PDF format. We use an OCR version (produced by Google Docs or Google search cache) and process that instead.|[2002–2013](http://www.nathancummings.org/news-and-reports/annual-reports/List); [2014–2016](http://www.nathancummings.org/about-the-foundation/Financial-Statments)|`proc_text.py`|
 |2017|Strange PDF. Might be best to wait until the financial report comes out.|[Source](http://www.nathancummings.org/what-we-fund/grants)|None|
 
-# How to use OCR
+## How to use OCR
 
 For years 2002–2016, the grants info is contained in a PDF that has not yet
 been passed through OCR. In order to get the text of the PDF, I decided to
