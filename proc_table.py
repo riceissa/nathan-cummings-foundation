@@ -104,9 +104,11 @@ def main():
                             }
 
                     try:
-                        d["grantee_location"] = util.cleaned(cols[0].i
-                                                                    .extract()
-                                                                    .text)
+                        loc = util.cleaned(cols[0].i.extract().text)
+                        assert re.match(r"[A-Za-z. -]+, [A-Za-z ]+", loc)
+                        d["grantee_location"] = loc
+                    except AssertionError:
+                        raise ValueError("Does not look like a location", loc, fp)
                     except:
                         pass
                     d["grantee"] = util.cleaned(cols[0].text)
