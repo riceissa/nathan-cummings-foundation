@@ -40,6 +40,7 @@ def parsed_grant(grant_tuple):
     if m:
         grantee = title_cased(util.cleaned(m.group(1)))
         location = title_cased(util.cleaned(m.group(2)))
+        assert re.match(r"[A-Za-z -]+, [A-Z][A-Z]", location) or not location
         (duration, support_type,
          purpose) = parsed_middle_part(
                         grant[len(m.group(0)):grant.find(". . .")].strip())
@@ -100,9 +101,10 @@ def title_cased(s):
         else:
             words.append(word[0] + word[1:].lower())
     result = " ".join(words)
-    if re.search(r", [A-Z][a-z]$", result):
-        # Fix for state codes like "New York, Ny"
-        result = result[:-1] + result[-1].upper()
+    if re.search(r", [A-Za-z][a-z]$", result):
+        # Fix for state codes like "New York, Ny" or "Indianapolis, in" (the
+        # latter's state code is all lowercase due to the special case of "in")
+        result = result[:-2] + result[-2:].upper()
     if result:
         return result[0].upper() + result[1:]
     else:
