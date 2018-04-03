@@ -104,13 +104,15 @@ def write_grant(grant, sub_area, file_path, writer):
         print(file_path, grant, file=sys.stderr)
     else:
         la_str = " ".join(map(util.cleaned, location_amount))
+        loc = find_location(la_str)
+        assert not loc or re.match(r"[A-Za-z -]+, [A-Z][A-Z]", loc) or re.match(r"[A-Z][A-Z]", loc)
         writer.writerow({"program": program_name(file_path),
                          "sub_area": sub_area,
                          "year": year,
                          "url": SOURCE[file_path],
                          "purpose": " ".join(map(util.cleaned, purpose)),
                          "notes": find_extra(la_str),
-                         "grantee_location": find_location(la_str),
+                         "grantee_location": loc,
                          "same_year_awards": first_dollar(la_str),
                          "grantee": util.cleaned(grantee.text)})
 
